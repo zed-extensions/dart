@@ -1,0 +1,11 @@
+#
+# zed-dart
+#
+
+*.wasm
+
+#
+# Rust
+#
+
+/target

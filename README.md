@@ -1,6 +1,7 @@
-## Roadmap
+# Zed Dart
 
-1. Add `dart run` command.
-2. Add `dart test` command.
-3. Add `flutter test --name` command, to allow running a single test or group of tests.
-4. Auto hot reload Flutter app when files change.
+A [Dart](https://dart.dev/) extension for [Zed](https://zed.dev).
+
+## Development
+
+To develop this extension, see the [Developing Extensions](https://zed.dev/docs/extensions/developing-extensions) section of the Zed docs.

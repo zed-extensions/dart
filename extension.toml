@@ -4,7 +4,7 @@ description = "Dart support."
 version = "0.1.2"
 schema_version = 1
 authors = ["Abdullah Alsigar <abdullah.alsigar@gmail.com>", "Flo <flo80@users.noreply.github.com>", "ybbond <hi@ybbond.id>"]
-repository = "https://github.com/zed-industries/zed"
+repository = "https://github.com/zed-extensions/dart"
 
 [language_servers.dart]
 name = "Dart LSP"
