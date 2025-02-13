@@ -117,6 +117,11 @@
 (conditional_assignable_selector
  (identifier) @property)
 
+((selector
+  (unconditional_assignable_selector (identifier) @function.method))
+  (selector (argument_part (arguments)))
+)
+
 ; assignments
 (assignment_expression
  left: (assignable_expression) @variable)
