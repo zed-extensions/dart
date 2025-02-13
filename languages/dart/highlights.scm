@@ -89,7 +89,6 @@
  name: (identifier) @type)
 (enum_constant
  name: (identifier) @type)
-(void_type) @type
 
 ((scoped_identifier
   scope: (identifier) @type
@@ -169,6 +168,7 @@
 ; Reserved words (cannot be used as identifiers)
 [
   (case_builtin)
+  (void_type)
  "late"
  "required"
  "extension"
