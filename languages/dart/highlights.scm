@@ -108,8 +108,6 @@
 ((identifier) @type
  (#match? @type "^_?[A-Z].*[a-z]"))
 
-("Function" @type)
-
 ; properties
 (unconditional_assignable_selector
  (identifier) @property)
@@ -186,6 +184,7 @@
  "new"
  "super"
  "with"
+ "Function"
  ] @keyword
 
 "return" @keyword.return
