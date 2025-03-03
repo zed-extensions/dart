@@ -112,6 +112,10 @@
     (initialized_variable_definition
         name: (identifier) @variable))
 
+(for_statement
+    (for_loop_parts
+        name: (identifier) @variable))
+
 ; properties
 (unconditional_assignable_selector
  (identifier) @property)
