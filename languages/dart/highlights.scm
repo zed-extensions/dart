@@ -80,11 +80,6 @@
 (function_signature
  name: (identifier) @function.method)
 
-(getter_signature
- (identifier) @function.method)
-
-(setter_signature
- name: (identifier) @function.method)
 (enum_declaration
  name: (identifier) @type)
 (enum_constant
@@ -122,6 +117,11 @@
 
 (conditional_assignable_selector
  (identifier) @property)
+
+(getter_signature
+ (identifier) @property)
+(setter_signature
+ name: (identifier) @property)
 
 ((selector
   (unconditional_assignable_selector (identifier) @function.method))
