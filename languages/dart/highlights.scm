@@ -117,7 +117,12 @@
 
 ((selector
   (unconditional_assignable_selector (identifier) @function.method))
-  (selector (argument_part (arguments)))
+  . (selector (argument_part (arguments)))
+)
+
+((selector
+  (conditional_assignable_selector (identifier) @function.method))
+  . (selector (argument_part (arguments)))
 )
 
 ; assignments
