@@ -108,6 +108,10 @@
 ((identifier) @type
  (#match? @type "^_?[A-Z].*[a-z]"))
 
+(local_variable_declaration
+    (initialized_variable_definition
+        name: (identifier) @variable))
+
 ; properties
 (unconditional_assignable_selector
  (identifier) @property)
