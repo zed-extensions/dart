@@ -83,7 +83,7 @@
 (enum_declaration
  name: (identifier) @type)
 (enum_constant
- name: (identifier) @type)
+ name: (identifier) @property)
 
 ((scoped_identifier
   scope: (identifier) @type
