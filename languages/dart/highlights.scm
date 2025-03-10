@@ -139,6 +139,16 @@
   . (selector (argument_part (arguments)))
 )
 
+; Some methods do not have a selector as a parent of the conditional_assignable_selector
+; For example, super methods.
+((unconditional_assignable_selector (identifier) @function.method)
+  . (selector (argument_part (arguments)))
+)
+
+((conditional_assignable_selector (identifier) @function.method)
+  . (selector (argument_part (arguments)))
+)
+
 ; assignments
 (assignment_expression
  left: (assignable_expression) @variable)
