@@ -115,6 +115,8 @@
     body: (function_expression_body
         (identifier) @variable))
 
+(catch_parameters (identifier) @variable)
+
 ; properties
 (unconditional_assignable_selector
  (identifier) @property)
