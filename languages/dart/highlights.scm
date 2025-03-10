@@ -111,10 +111,6 @@
     (for_loop_parts
         name: (identifier) @variable))
 
-(function_expression
-    body: (function_expression_body
-        (identifier) @variable))
-
 (catch_parameters (identifier) @variable)
 
 ; properties
