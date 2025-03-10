@@ -111,6 +111,10 @@
     (for_loop_parts
         name: (identifier) @variable))
 
+(function_expression
+    body: (function_expression_body
+        (identifier) @variable))
+
 ; properties
 (unconditional_assignable_selector
  (identifier) @property)
