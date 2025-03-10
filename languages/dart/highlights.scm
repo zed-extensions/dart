@@ -205,7 +205,8 @@
 ; Built in identifiers:
 ; alone these are marked as keywords
 [
-  "deferred"
+ (part_of_builtin)
+ "deferred"
  "factory"
  "get"
  "implements"
