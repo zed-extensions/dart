@@ -22,5 +22,23 @@
     "command": "fvm flutter",
     "args": ["test", "$ZED_FILE"],
     "tags": ["flutter-test-main"]
+  },
+  {
+    "label": "dart test file $ZED_STEM",
+    "command": "dart",
+    "args": ["test", "$ZED_FILE"],
+    "tags": ["dart-test-file"]
+  },
+  {
+    "label": "dart test group $ZED_STEM",
+    "command": "dart",
+    "args": ["test", "\"$ZED_FILE?line=$ZED_ROW\""],
+    "tags": ["dart-test-group"]
+  },
+  {
+    "label": "dart test single $ZED_STEM",
+    "command": "dart",
+    "args": ["test", "\"$ZED_FILE?line=$ZED_ROW\""],
+    "tags": ["dart-test-single"]
   }
 ]
