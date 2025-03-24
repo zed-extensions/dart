@@ -80,16 +80,10 @@
 (function_signature
  name: (identifier) @function.method)
 
-(getter_signature
- (identifier) @function.method)
-
-(setter_signature
- name: (identifier) @function.method)
 (enum_declaration
  name: (identifier) @type)
 (enum_constant
- name: (identifier) @type)
-(void_type) @type
+ name: (identifier) @property)
 
 ((scoped_identifier
   scope: (identifier) @type
@@ -109,7 +103,15 @@
 ((identifier) @type
  (#match? @type "^_?[A-Z].*[a-z]"))
 
-("Function" @type)
+(local_variable_declaration
+    (initialized_variable_definition
+        name: (identifier) @variable))
+
+(for_statement
+    (for_loop_parts
+        name: (identifier) @variable))
+
+(catch_parameters (identifier) @variable)
 
 ; properties
 (unconditional_assignable_selector
@@ -117,6 +119,31 @@
 
 (conditional_assignable_selector
  (identifier) @property)
+
+(getter_signature
+ (identifier) @property)
+(setter_signature
+ name: (identifier) @property)
+
+((selector
+  (unconditional_assignable_selector (identifier) @function.method))
+  . (selector (argument_part (arguments)))
+)
+
+((selector
+  (conditional_assignable_selector (identifier) @function.method))
+  . (selector (argument_part (arguments)))
+)
+
+; Some methods do not have a selector as a parent of the conditional_assignable_selector
+; For example, super methods.
+((unconditional_assignable_selector (identifier) @function.method)
+  . (selector (argument_part (arguments)))
+)
+
+((conditional_assignable_selector (identifier) @function.method)
+  . (selector (argument_part (arguments)))
+)
 
 ; assignments
 (assignment_expression
@@ -127,7 +154,7 @@
 ; Parameters
 ; --------------------
 (formal_parameter
- name: (identifier) @variable.parameter)
+ (identifier) @variable.parameter)
 
 (named_argument
  (label
@@ -169,6 +196,7 @@
 ; Reserved words (cannot be used as identifiers)
 [
   (case_builtin)
+  (void_type)
  "late"
  "required"
  "extension"
@@ -181,6 +209,7 @@
  "new"
  "super"
  "with"
+ "Function"
  ] @keyword
 
 "return" @keyword.return
@@ -188,7 +217,8 @@
 ; Built in identifiers:
 ; alone these are marked as keywords
 [
-  "deferred"
+ (part_of_builtin)
+ "deferred"
  "factory"
  "get"
  "implements"
