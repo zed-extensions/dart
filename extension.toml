@@ -1,13 +1,13 @@
 id = "dart"
 name = "Dart"
 description = "Dart support."
-version = "0.2.0"
+version = "0.2.1"
 schema_version = 1
 authors = [
     "Abdullah Alsigar <abdullah.alsigar@gmail.com>",
     "Flo <flo80@users.noreply.github.com>",
     "ybbond <hi@ybbond.id>",
-    "nielsenko <kasper@byolimit.com>"
+    "nielsenko <kasper@byolimit.com>",
 ]
 repository = "https://github.com/zed-extensions/dart"
 
@@ -19,3 +19,8 @@ languages = ["Dart"]
 [grammars.dart]
 repository = "https://github.com/UserNobody14/tree-sitter-dart"
 commit = "80e23c07b64494f7e21090bb3450223ef0b192f4"
+
+[debug_adapters.dart]
+# Optional relative path to the JSON schema for the debug adapter configuration schema. Defaults to `debug_adapter_schemas/$DEBUG_ADAPTER_NAME_ID.json`.
+# Note that while this field is optional, a schema is mandatory.
+# schema_path = "relative/path/to/schema.json"

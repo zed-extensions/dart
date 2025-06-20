@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dart Debug Adapter Configuration",
+  "type": "object",
+  "properties": {
+    "adapter": {
+      "type": "string",
+      "enum": ["dart"]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["dart", "flutter"],
+      "description": "Debug Flutter or Dart file"
+    },
+    "label": {
+      "type": "string",
+      "description": "Human-readable name for this debug configuration",
+      "examples": ["Launch Dart App", "Debug Main", "Dart Console"]
+    },
+    "program": {
+      "type": "string",
+      "description": "Path to the Dart file to debug",
+      "examples": ["lib/main.dart", "bin/main.dart", "test/example_test.dart"]
+    },
+    "args": {
+      "type": "array",
+      "description": "Arguments passed to the Dart program.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "device_id": {
+      "type": "string",
+      "examples": ["chrome", "edge", "<android-id>", "<ios-id>"]
+    },
+    "platform": {
+      "type": "string",
+      "examples": ["web", "desktop"]
+    },
+    "stopOnEntry": {
+      "type": "boolean",
+      "description": "Pause debugger on entry.",
+      "default": false
+    }
+  },
+  "required": ["program", "type", "adapter"],
+  "additionalProperties": false
+}
