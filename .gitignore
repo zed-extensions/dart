@@ -1,11 +1,3 @@
-#
-# zed-dart
-#
-
 *.wasm
-
-#
-# Rust
-#
-
 /target
+grammars/
