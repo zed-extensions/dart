@@ -1,3 +1,4 @@
+(identifier) @variable
 (dotted_identifier_list) @string
 
 ; Methods
@@ -103,16 +104,6 @@
 ((identifier) @type
  (#match? @type "^_?[A-Z].*[a-z]"))
 
-(local_variable_declaration
-    (initialized_variable_definition
-        name: (identifier) @variable))
-
-(for_statement
-    (for_loop_parts
-        name: (identifier) @variable))
-
-(catch_parameters (identifier) @variable)
-
 ; properties
 (unconditional_assignable_selector
  (identifier) @property)
@@ -210,7 +201,7 @@
  "super"
  "with"
  "Function"
- ] @keyword
+ ] @keyword.definition
 
 "return" @keyword.return
 
