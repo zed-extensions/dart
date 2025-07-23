@@ -20,7 +20,7 @@ languages = ["Dart"]
 repository = "https://github.com/UserNobody14/tree-sitter-dart"
 commit = "80e23c07b64494f7e21090bb3450223ef0b192f4"
 
-[debug_adapters.dart]
+[debug_adapters.Dart]
 # Optional relative path to the JSON schema for the debug adapter configuration schema. Defaults to `debug_adapter_schemas/$DEBUG_ADAPTER_NAME_ID.json`.
 # Note that while this field is optional, a schema is mandatory.
 # schema_path = "relative/path/to/schema.json"
