@@ -111,6 +111,9 @@
 (conditional_assignable_selector
  (identifier) @property)
 
+(cascade_selector
+ (identifier) @property)
+
 (getter_signature
  (identifier) @property)
 (setter_signature
@@ -133,6 +136,10 @@
 )
 
 ((conditional_assignable_selector (identifier) @function.method)
+  . (selector (argument_part (arguments)))
+)
+
+((cascade_selector (identifier) @function.method)
   . (selector (argument_part (arguments)))
 )
 
