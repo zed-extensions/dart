@@ -249,7 +249,7 @@
  "final"
   "base"
   "sealed"
- ] @type.qualifier
+ ] @keyword.modifier ; could be @type.qualifier
 
 ; when used as an identifier:
 ((identifier) @variable.builtin
