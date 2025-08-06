@@ -1,7 +1,12 @@
+use std::panic;
 use zed::lsp::CompletionKind;
 use zed::settings::LspSettings;
 use zed::{CodeLabel, CodeLabelSpan};
-use zed_extension_api::{self as zed, serde_json, Result};
+use zed_extension_api::serde_json::{json, Value};
+use zed_extension_api::{
+    self as zed, serde_json, DebugAdapterBinary, DebugTaskDefinition, Result,
+    StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
+};
 
 struct DartBinary {
     pub path: String,
@@ -47,6 +52,91 @@ impl DartExtension {
 impl zed::Extension for DartExtension {
     fn new() -> Self {
         Self
+    }
+
+    /// ref:
+    /// https://github.com/zed-industries/zed/blob/main/crates/dap_adapters/src/gdb.rs
+    fn get_dap_binary(
+        &mut self,
+        adapter_name: String,
+        config: DebugTaskDefinition,
+        user_provided_debug_adapter_path: Option<String>,
+        worktree: &Worktree,
+    ) -> Result<DebugAdapterBinary, String> {
+        let user_config: serde_json::Value = serde_json::from_str(&config.config)
+            .map_err(|e| format!("Failed to parse debug config: {}", e))?;
+
+        let program = user_config
+            .get("program")
+            .and_then(|v| v.as_str())
+            .unwrap_or("lib/main.dart");
+
+        let args = user_config
+            .get("args")
+            .and_then(|v| v.as_array())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str())
+                    .map(|s| s.to_string())
+                    .collect::<Vec<String>>()
+            })
+            .unwrap_or_else(|| vec![]);
+
+        // Get debug_mode from user config (flutter or dart)
+        let debug_mode = user_config
+            .get("type")
+            .and_then(|v| v.as_str())
+            .filter(|s| !s.trim().is_empty()) // Filter out empty strings
+            .ok_or_else(|| "type is required and cannot be empty or null".to_string())?;
+        let command = if debug_mode == "flutter" {
+            "flutter"
+        } else {
+            "dart"
+        };
+        let device_id = user_config
+            .get("device_id")
+            .and_then(|v| v.as_str())
+            .unwrap_or("chrome");
+
+        let platform = user_config
+            .get("platform")
+            .and_then(|v| v.as_str())
+            .unwrap_or("web");
+        let cwd = Some(worktree.root_path());
+
+        let config_json = json!({
+            "type": command,
+            "request": "launch",
+            "program": program,
+            "cwd": cwd.clone().unwrap_or_default(),
+            "args": args,
+            "flutterMode": "debug",
+            "deviceId": device_id,
+            "platform": platform,
+            "stopOnEntry": false
+        })
+        .to_string();
+
+        let debug_adapter_binary = DebugAdapterBinary {
+            command: Some(command.to_string()),
+            arguments: vec!["debug_adapter".to_string()],
+            envs: vec![], // Add any Dart-specific env vars if needed
+            cwd,
+            connection: None,
+            request_args: StartDebuggingRequestArguments {
+                configuration: config_json,
+                request: StartDebuggingRequestArgumentsRequest::Launch,
+            }, // request_args: StartDebuggingRequestArguments:,
+        };
+        Result::Ok(debug_adapter_binary)
+    }
+
+    fn dap_request_kind(
+        &mut self,
+        _adapter_name: String,
+        _config: serde_json::Value,
+    ) -> Result<StartDebuggingRequestArgumentsRequest, String> {
+        Ok(StartDebuggingRequestArgumentsRequest::Launch)
     }
 
     fn language_server_command(
