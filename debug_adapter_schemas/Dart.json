@@ -26,6 +26,10 @@
       "type": "string",
       "description": "Path to the working directory"
     },
+    "useFvm": {
+      "type": "boolean",
+      "description": "Weather to use fvm to run the Dart/Flutter program"
+    },
     "args": {
       "type": "array",
       "description": "Arguments passed to the Dart program.",

@@ -82,17 +82,32 @@ impl zed::Extension for DartExtension {
             })
             .unwrap_or_else(|| vec![]);
 
+        let use_fvm = user_config
+            .get("useFvm")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
+
         // Get debug_mode from user config (flutter or dart)
         let debug_mode = user_config
             .get("type")
             .and_then(|v| v.as_str())
             .filter(|s| !s.trim().is_empty()) // Filter out empty strings
             .ok_or_else(|| "type is required and cannot be empty or null".to_string())?;
-        let command = if debug_mode == "flutter" {
+        let tool = if debug_mode == "flutter" {
             "flutter"
         } else {
             "dart"
         };
+
+        let (command, arguments) = if use_fvm {
+            (
+                "fvm".to_string(),
+                vec![tool.to_string(), "debug_adapter".to_string()],
+            )
+        } else {
+            (tool.to_string(), vec!["debug_adapter".to_string()])
+        };
+
         let device_id = user_config
             .get("device_id")
             .and_then(|v| v.as_str())
@@ -102,6 +117,7 @@ impl zed::Extension for DartExtension {
             .get("platform")
             .and_then(|v| v.as_str())
             .unwrap_or("web");
+
         let cwd = user_config
             .get("cwd")
             .and_then(|v| v.as_str())
@@ -109,7 +125,7 @@ impl zed::Extension for DartExtension {
             .or_else(|| Some(worktree.root_path()));
 
         let config_json = json!({
-            "type": command,
+            "type": tool,
             "request": "launch",
             "program": program,
             "cwd": cwd.clone().unwrap_or_default(),
@@ -122,8 +138,8 @@ impl zed::Extension for DartExtension {
         .to_string();
 
         let debug_adapter_binary = DebugAdapterBinary {
-            command: Some(command.to_string()),
-            arguments: vec!["debug_adapter".to_string()],
+            command: Some(command),
+            arguments,
             envs: vec![], // Add any Dart-specific env vars if needed
             cwd,
             connection: None,
