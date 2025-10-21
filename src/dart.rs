@@ -102,7 +102,11 @@ impl zed::Extension for DartExtension {
             .get("platform")
             .and_then(|v| v.as_str())
             .unwrap_or("web");
-        let cwd = Some(worktree.root_path());
+        let cwd = user_config
+            .get("cwd")
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string())
+            .or_else(|| Some(worktree.root_path()));
 
         let config_json = json!({
             "type": command,

@@ -22,6 +22,10 @@
       "description": "Path to the Dart file to debug",
       "examples": ["lib/main.dart", "bin/main.dart", "test/example_test.dart"]
     },
+    "cwd": {
+      "type": "string",
+      "description": "Path to the working directory"
+    },
     "args": {
       "type": "array",
       "description": "Arguments passed to the Dart program.",
