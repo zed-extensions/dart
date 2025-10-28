@@ -5,7 +5,7 @@
   "properties": {
     "adapter": {
       "type": "string",
-      "enum": ["dart"]
+      "enum": ["Dart"]
     },
     "type": {
       "type": "string",
@@ -21,6 +21,14 @@
       "type": "string",
       "description": "Path to the Dart file to debug",
       "examples": ["lib/main.dart", "bin/main.dart", "test/example_test.dart"]
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Path to the working directory"
+    },
+    "useFvm": {
+      "type": "boolean",
+      "description": "Weather to use fvm to run the Dart/Flutter program"
     },
     "args": {
       "type": "array",
