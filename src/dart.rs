@@ -4,7 +4,7 @@ use zed::settings::LspSettings;
 use zed::{CodeLabel, CodeLabelSpan};
 use zed_extension_api::serde_json::{json, Value};
 use zed_extension_api::{
-    self as zed, serde_json, DebugAdapterBinary, DebugTaskDefinition, Result,
+    self as zed, current_platform, serde_json, DebugAdapterBinary, DebugTaskDefinition, Os, Result,
     StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
 };
 
@@ -93,10 +93,18 @@ impl zed::Extension for DartExtension {
             .and_then(|v| v.as_str())
             .filter(|s| !s.trim().is_empty()) // Filter out empty strings
             .ok_or_else(|| "type is required and cannot be empty or null".to_string())?;
+
+        let (os, _) = current_platform();
         let tool = if debug_mode == "flutter" {
-            "flutter"
+            match os {
+                Os::Windows => "flutter.bat",
+                _ => "flutter",
+            }
         } else {
-            "dart"
+            match os {
+                Os::Windows => "dart.bat",
+                _ => "dart",
+            }
         };
 
         let (command, arguments) = if use_fvm {
