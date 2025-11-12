@@ -1,8 +1,7 @@
-use std::panic;
 use zed::lsp::CompletionKind;
 use zed::settings::LspSettings;
 use zed::{CodeLabel, CodeLabelSpan};
-use zed_extension_api::serde_json::{json, Value};
+use zed_extension_api::serde_json::json;
 use zed_extension_api::{
     self as zed, current_platform, serde_json, DebugAdapterBinary, DebugTaskDefinition, Os, Result,
     StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
@@ -58,9 +57,9 @@ impl zed::Extension for DartExtension {
     /// https://github.com/zed-industries/zed/blob/main/crates/dap_adapters/src/gdb.rs
     fn get_dap_binary(
         &mut self,
-        adapter_name: String,
+        _adapter_name: String,
         config: DebugTaskDefinition,
-        user_provided_debug_adapter_path: Option<String>,
+        _user_provided_debug_adapter_path: Option<String>,
         worktree: &Worktree,
     ) -> Result<DebugAdapterBinary, String> {
         let user_config: serde_json::Value = serde_json::from_str(&config.config)
