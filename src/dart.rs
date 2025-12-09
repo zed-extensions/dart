@@ -63,7 +63,7 @@ impl zed::Extension for DartExtension {
         worktree: &Worktree,
     ) -> Result<DebugAdapterBinary, String> {
         let user_config: serde_json::Value = serde_json::from_str(&config.config)
-            .map_err(|e| format!("Failed to parse debug config: {}", e))?;
+            .map_err(|e| format!("Failed to parse debug config: {e}"))?;
 
         let program = user_config
             .get("program")
@@ -79,7 +79,7 @@ impl zed::Extension for DartExtension {
                     .map(|s| s.to_string())
                     .collect::<Vec<String>>()
             })
-            .unwrap_or_else(|| vec![]);
+            .unwrap_or_default();
 
         let use_fvm = user_config
             .get("useFvm")
