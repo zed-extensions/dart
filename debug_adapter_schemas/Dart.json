@@ -5,22 +5,35 @@
   "properties": {
     "adapter": {
       "type": "string",
-      "enum": ["Dart"]
+      "enum": [
+        "Dart"
+      ]
     },
     "type": {
       "type": "string",
-      "enum": ["dart", "flutter"],
+      "enum": [
+        "dart",
+        "flutter"
+      ],
       "description": "Debug Flutter or Dart file"
     },
     "label": {
       "type": "string",
       "description": "Human-readable name for this debug configuration",
-      "examples": ["Launch Dart App", "Debug Main", "Dart Console"]
+      "examples": [
+        "Launch Dart App",
+        "Debug Main",
+        "Dart Console"
+      ]
     },
     "program": {
       "type": "string",
       "description": "Path to the Dart file to debug",
-      "examples": ["lib/main.dart", "bin/main.dart", "test/example_test.dart"]
+      "examples": [
+        "lib/main.dart",
+        "bin/main.dart",
+        "test/example_test.dart"
+      ]
     },
     "cwd": {
       "type": "string",
@@ -40,11 +53,32 @@
     },
     "device_id": {
       "type": "string",
-      "examples": ["chrome", "edge", "<android-id>", "<ios-id>"]
+      "examples": [
+        "chrome",
+        "edge",
+        "<android-id>",
+        "<ios-id>"
+      ]
     },
     "platform": {
       "type": "string",
-      "examples": ["web", "desktop"]
+      "examples": [
+        "web",
+        "desktop"
+      ]
+    },
+    "request": {
+      "type": "string",
+      "enum": [
+        "launch",
+        "attach"
+      ],
+      "description": "The debug request type",
+      "default": "launch"
+    },
+    "vmServiceUri": {
+      "type": "string",
+      "description": "The VM Service URI to attach to (for attach mode)"
     },
     "stopOnEntry": {
       "type": "boolean",
@@ -52,6 +86,10 @@
       "default": false
     }
   },
-  "required": ["program", "type", "adapter"],
+  "required": [
+    "program",
+    "type",
+    "adapter"
+  ],
   "additionalProperties": false
 }
