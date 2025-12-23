@@ -16,3 +16,13 @@
 (enum_declaration
     "enum" @context
     name: (_) @name) @item
+
+(extension_declaration
+    "extension" @context
+    name: (_) @name) @item
+
+(static_final_declaration
+    (identifier) @name) @item
+
+(initialized_identifier
+    (identifier) @name) @item
