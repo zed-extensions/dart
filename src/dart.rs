@@ -136,9 +136,7 @@ impl zed::Extension for DartExtension {
             .and_then(|v| v.as_str())
             .unwrap_or("launch");
 
-        let vm_service_uri = user_config
-            .get("vmServiceUri")
-            .and_then(|v| v.as_str());
+        let vm_service_uri = user_config.get("vmServiceUri").and_then(|v| v.as_str());
 
         let config_json = json!({
             "type": tool,
