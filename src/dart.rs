@@ -131,9 +131,17 @@ impl zed::Extension for DartExtension {
             .map(|s| s.to_string())
             .or_else(|| Some(worktree.root_path()));
 
+        let request = user_config
+            .get("request")
+            .and_then(|v| v.as_str())
+            .unwrap_or("launch");
+
+        let vm_service_uri = user_config.get("vmServiceUri").and_then(|v| v.as_str());
+
         let config_json = json!({
             "type": tool,
-            "request": "launch",
+            "request": request,
+            "vmServiceUri": vm_service_uri,
             "program": program,
             "cwd": cwd.clone().unwrap_or_default(),
             "args": args,
@@ -152,7 +160,10 @@ impl zed::Extension for DartExtension {
             connection: None,
             request_args: StartDebuggingRequestArguments {
                 configuration: config_json,
-                request: StartDebuggingRequestArgumentsRequest::Launch,
+                request: match request {
+                    "attach" => StartDebuggingRequestArgumentsRequest::Attach,
+                    _ => StartDebuggingRequestArgumentsRequest::Launch,
+                },
             }, // request_args: StartDebuggingRequestArguments:,
         };
         Result::Ok(debug_adapter_binary)
@@ -161,9 +172,18 @@ impl zed::Extension for DartExtension {
     fn dap_request_kind(
         &mut self,
         _adapter_name: String,
-        _config: serde_json::Value,
+        config: serde_json::Value,
     ) -> Result<StartDebuggingRequestArgumentsRequest, String> {
-        Ok(StartDebuggingRequestArgumentsRequest::Launch)
+        match config.get("request") {
+            Some(v) if v == "launch" => Ok(StartDebuggingRequestArgumentsRequest::Launch),
+            Some(v) if v == "attach" => Ok(StartDebuggingRequestArgumentsRequest::Attach),
+            Some(value) => Err(format!(
+                "Unexpected value for `request` key in Dart debug adapter configuration: {value:?}"
+            )),
+            None => {
+                Err("Missing required `request` field in Dart debug adapter configuration".into())
+            }
+        }
     }
 
     fn language_server_command(
