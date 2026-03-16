@@ -1,3 +1,11 @@
+; Dart main — fallback for standalone Dart files.
+; Must be first so that more specific patterns below (Flutter, test)
+; take priority via Zed's "last target wins" behavior on the same row.
+((function_signature
+  name: (_) @run)
+  (#eq? @run "main")
+  (#set! tag dart-main))
+
 ; Flutter main
 ((import_or_export
   (library_import
