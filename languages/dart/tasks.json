@@ -1,5 +1,11 @@
 [
   {
+    "label": "dart run $ZED_STEM",
+    "command": "dart",
+    "args": ["run", "$ZED_FILE"],
+    "tags": ["dart-main"]
+  },
+  {
     "label": "flutter run",
     "command": "flutter",
     "args": ["run"],
