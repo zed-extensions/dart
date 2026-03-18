@@ -41,7 +41,7 @@
     },
     "useFvm": {
       "type": "boolean",
-      "description": "Weather to use fvm to run the Dart/Flutter program"
+      "description": "Whether to use fvm to run the Dart/Flutter program"
     },
     "args": {
       "type": "array",
@@ -50,6 +50,32 @@
         "type": "string"
       },
       "default": []
+    },
+    "toolArgs": {
+      "type": "array",
+      "description": "Arguments passed to the Flutter/Dart tool (e.g. --flavor, -d chrome).",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "env": {
+      "type": "object",
+      "description": "Environment variables to set when launching the debug adapter.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "flutterMode": {
+      "type": "string",
+      "enum": [
+        "debug",
+        "profile",
+        "release",
+        "test"
+      ],
+      "description": "The Flutter mode to use.",
+      "default": "debug"
     },
     "device_id": {
       "type": "string",
