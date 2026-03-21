@@ -30,6 +30,30 @@
     "tags": ["flutter-test-main"]
   },
   {
+    "label": "flutter test group $ZED_STEM",
+    "command": "flutter",
+    "args": ["test", "\"$ZED_FILE?line=$ZED_ROW\""],
+    "tags": ["flutter-test-group"]
+  },
+  {
+    "label": "fvm flutter test group $ZED_STEM",
+    "command": "fvm flutter",
+    "args": ["test", "\"$ZED_FILE?line=$ZED_ROW\""],
+    "tags": ["flutter-test-group"]
+  },
+  {
+    "label": "flutter test single $ZED_STEM",
+    "command": "flutter",
+    "args": ["test", "\"$ZED_FILE?line=$ZED_ROW\""],
+    "tags": ["flutter-test-single"]
+  },
+  {
+    "label": "fvm flutter test single $ZED_STEM",
+    "command": "fvm flutter",
+    "args": ["test", "\"$ZED_FILE?line=$ZED_ROW\""],
+    "tags": ["flutter-test-single"]
+  },
+  {
     "label": "dart test file $ZED_STEM",
     "command": "dart",
     "args": ["test", "$ZED_FILE"],
