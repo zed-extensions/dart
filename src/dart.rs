@@ -3,7 +3,8 @@ use zed::settings::LspSettings;
 use zed::{CodeLabel, CodeLabelSpan};
 use zed_extension_api::serde_json::json;
 use zed_extension_api::{
-    self as zed, current_platform, serde_json, DebugAdapterBinary, DebugTaskDefinition, Os, Result,
+    self as zed, current_platform, serde_json, DapCustomAction, DapCustomActionIcon,
+    DapCustomActionTrigger, DebugAdapterBinary, DebugTaskDefinition, Os, Result,
     StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
 };
 
@@ -138,6 +139,12 @@ impl zed::Extension for DartExtension {
 
         let vm_service_uri = user_config.get("vmServiceUri").and_then(|v| v.as_str());
 
+        let tool_args = if debug_mode == "flutter" {
+            vec!["-d".to_string(), device_id.to_string()]
+        } else {
+            vec![]
+        };
+
         let config_json = json!({
             "type": tool,
             "request": request,
@@ -145,6 +152,7 @@ impl zed::Extension for DartExtension {
             "program": program,
             "cwd": cwd.clone().unwrap_or_default(),
             "args": args,
+            "toolArgs": tool_args,
             "flutterMode": "debug",
             "deviceId": device_id,
             "platform": platform,
@@ -215,6 +223,29 @@ impl zed::Extension for DartExtension {
         Ok(Some(serde_json::json!({
             "dart": settings
         })))
+    }
+
+    fn get_dap_custom_actions(&self, adapter_name: String) -> Vec<DapCustomAction> {
+        if adapter_name != "Flutter" && adapter_name != "Dart" {
+            return Vec::new();
+        }
+
+        vec![
+            DapCustomAction {
+                label: "Hot Reload".to_string(),
+                command: "hotReload".to_string(),
+                arguments: "{}".to_string(),
+                trigger: DapCustomActionTrigger::Both,
+                icon: DapCustomActionIcon::Flame,
+            },
+            DapCustomAction {
+                label: "Hot Restart".to_string(),
+                command: "hotRestart".to_string(),
+                arguments: "{}".to_string(),
+                trigger: DapCustomActionTrigger::Toolbar,
+                icon: DapCustomActionIcon::RotateCw,
+            },
+        ]
     }
 
     fn label_for_completion(
