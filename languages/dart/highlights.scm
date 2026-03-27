@@ -290,6 +290,7 @@
   "else"
   "switch"
   "default"
+  "case"
 ] @keyword.conditional
 
 [
