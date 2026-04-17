@@ -17,11 +17,6 @@
     .
     (argument_part))) @function
 
-; Annotations
-; --------------------
-(annotation
-  name: (identifier) @attribute)
-
 ; Operators and Tokens
 ; --------------------
 (template_substitution
@@ -36,7 +31,6 @@
 (escape_sequence) @string.escape
 
 [
-  "@"
   "=>"
   ".."
   "??"
@@ -113,6 +107,12 @@
 
 ((identifier) @type
   (#match? @type "^_?[A-Z].*[a-z]"))
+
+; Annotations
+; --------------------
+(annotation
+  "@" @attribute
+  name: (identifier) @attribute)
 
 ; properties
 (unconditional_assignable_selector
@@ -290,6 +290,7 @@
   "else"
   "switch"
   "default"
+  "case"
 ] @keyword.conditional
 
 [
