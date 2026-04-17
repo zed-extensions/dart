@@ -1,5 +1,5 @@
 use zed::lsp::CompletionKind;
-use zed::settings::LspSettings;
+use zed::settings::{LanguageSettings, LspSettings};
 use zed::{CodeLabel, CodeLabelSpan};
 use zed_extension_api::serde_json::json;
 use zed_extension_api::{
@@ -207,14 +207,25 @@ impl zed::Extension for DartExtension {
         _language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<Option<serde_json::Value>> {
-        let settings = LspSettings::for_worktree("dart", worktree)
+        let mut dart_settings = serde_json::Map::new();
+
+        if let Ok(language_settings) = LanguageSettings::for_worktree(Some("Dart"), worktree) {
+            dart_settings.insert(
+                "lineLength".into(),
+                language_settings.preferred_line_length.into(),
+            );
+        }
+
+        let user_settings = LspSettings::for_worktree("dart", worktree)
             .ok()
             .and_then(|lsp_settings| lsp_settings.settings.clone())
             .unwrap_or_default();
 
-        Ok(Some(serde_json::json!({
-            "dart": settings
-        })))
+        if let serde_json::Value::Object(user_map) = user_settings {
+            dart_settings.extend(user_map);
+        }
+
+        Ok(Some(serde_json::json!({ "dart": dart_settings })))
     }
 
     fn label_for_completion(
