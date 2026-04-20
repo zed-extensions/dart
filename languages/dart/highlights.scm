@@ -155,13 +155,14 @@
 
 ; Dot shorthand
 (dot_shorthand
-    (identifier) @property)
+  (identifier) @property)
+
 ((dot_shorthand
-    (identifier) @function.method)
-    .
-    (selector
-        (argument_part
-            (arguments))))
+  (identifier) @function.method)
+  .
+  (selector
+    (argument_part
+      (arguments))))
 
 ; Some methods do not have a selector as a parent of the conditional_assignable_selector
 ; For example, super methods.
