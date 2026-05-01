@@ -12,6 +12,16 @@
     "tags": ["flutter-main"]
   },
   {
+    "label": "flutter emulators",
+    "command": "flutter",
+    "args": ["emulators"]
+  },
+  {
+    "label": "flutter emulators launch apple_ios_simulator",
+    "command": "flutter",
+    "args": ["emulators", "--launch", "apple_ios_simulator"]
+  },
+  {
     "label": "flutter test $ZED_STEM",
     "command": "flutter",
     "args": ["test", "$ZED_FILE"],
