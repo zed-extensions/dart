@@ -184,6 +184,11 @@
   (label
     (identifier) @variable.parameter))
 
+; Record fields
+(record_field
+  (label
+    (identifier) @property))
+
 ; Literals
 ; --------------------
 [
@@ -269,6 +274,10 @@
 [
   (const_builtin)
   (final_builtin)
+  (sealed)
+  (base)
+  (interface)
+  (mixin)
   "abstract"
   "covariant"
   "dynamic"
@@ -291,6 +300,7 @@
   "switch"
   "default"
   "case"
+  "when"
 ] @keyword.conditional
 
 [
