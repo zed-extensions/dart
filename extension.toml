@@ -18,7 +18,7 @@ languages = ["Dart"]
 
 [grammars.dart]
 repository = "https://github.com/UserNobody14/tree-sitter-dart"
-commit = "80e23c07b64494f7e21090bb3450223ef0b192f4"
+commit = "6922ad29141e819773d6ffb0c6d2c27adefb5acc"
 
 [debug_adapters.Dart]
 # Optional relative path to the JSON schema for the debug adapter configuration schema. Defaults to `debug_adapter_schemas/$DEBUG_ADAPTER_NAME_ID.json`.

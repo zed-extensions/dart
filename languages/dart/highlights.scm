@@ -153,6 +153,22 @@
   (argument_part
     (arguments)))
 
+; Dot shorthand
+(dot_shorthand
+  (identifier) @property)
+
+((dot_shorthand
+  (identifier) @function.method)
+  .
+  (selector
+    (argument_part
+      (arguments))))
+
+((dot_shorthand
+  (identifier) @function.method)
+  .
+  (arguments))
+
 ; Some methods do not have a selector as a parent of the conditional_assignable_selector
 ; For example, super methods.
 ((unconditional_assignable_selector
@@ -271,7 +287,6 @@
   (final_builtin)
   "abstract"
   "covariant"
-  "dynamic"
   "external"
   "static"
   "final"
