@@ -164,6 +164,11 @@
     (argument_part
       (arguments))))
 
+((dot_shorthand
+  (identifier) @function.method)
+  .
+  (arguments))
+
 ; Some methods do not have a selector as a parent of the conditional_assignable_selector
 ; For example, super methods.
 ((unconditional_assignable_selector
