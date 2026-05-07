@@ -752,7 +752,7 @@ dependencies = [
 
 [[package]]
 name = "zed_dart"
-version = "0.3.6"
+version = "0.3.7"
 dependencies = [
  "zed_extension_api",
 ]
