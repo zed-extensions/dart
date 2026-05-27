@@ -1,6 +1,6 @@
 id = "dart"
 name = "Dart"
-description = "Dart support."
+description = "Dart and Flutter development support."
 version = "0.3.6"
 schema_version = 1
 authors = [
