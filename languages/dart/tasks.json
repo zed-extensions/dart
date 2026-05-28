@@ -1,5 +1,25 @@
 [
   {
+    "label": "dart pub get",
+    "command": "dart",
+    "args": ["pub", "get"]
+  },
+  {
+    "label": "dart run build_runner build",
+    "command": "dart",
+    "args": ["run", "build_runner", "build", "--delete-conflicting-outputs"]
+  },
+  {
+    "label": "dart analyze",
+    "command": "dart",
+    "args": ["analyze"]
+  },
+  {
+    "label": "dart format",
+    "command": "dart",
+    "args": ["format", "."]
+  },
+  {
     "label": "flutter run",
     "command": "flutter",
     "args": ["run"],
