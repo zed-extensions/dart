@@ -313,6 +313,7 @@
   "throw"
   "catch"
   "finally"
+  (rethrow_builtin)
   (break_statement)
 ] @keyword.exception
 
