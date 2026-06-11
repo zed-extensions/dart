@@ -27,8 +27,8 @@
   },
   {
     "label": "fvm flutter run",
-    "command": "fvm flutter",
-    "args": ["run"],
+    "command": "fvm",
+    "args": ["flutter", "run"],
     "tags": ["flutter-main"]
   },
   {
@@ -39,8 +39,8 @@
   },
   {
     "label": "fvm flutter test $ZED_STEM",
-    "command": "fvm flutter",
-    "args": ["test", "$ZED_FILE"],
+    "command": "fvm",
+    "args": ["flutter", "test", "$ZED_FILE"],
     "tags": ["flutter-test-main"]
   },
   {

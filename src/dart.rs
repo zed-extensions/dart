@@ -7,6 +7,16 @@ use zed_extension_api::{
     StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
 };
 
+fn tool_binary(debug_mode: &str) -> &'static str {
+    let (os, _) = current_platform();
+    match (debug_mode, os) {
+        ("flutter", Os::Windows) => "flutter.bat",
+        ("flutter", _) => "flutter",
+        (_, Os::Windows) => "dart.bat",
+        (_, _) => "dart",
+    }
+}
+
 struct DartBinary {
     pub path: String,
     pub args: Option<Vec<String>>,
@@ -90,21 +100,10 @@ impl zed::Extension for DartExtension {
         let debug_mode = user_config
             .get("type")
             .and_then(|v| v.as_str())
-            .filter(|s| !s.trim().is_empty()) // Filter out empty strings
+            .filter(|s| !s.trim().is_empty())
             .ok_or_else(|| "type is required and cannot be empty or null".to_string())?;
 
-        let (os, _) = current_platform();
-        let tool = if debug_mode == "flutter" {
-            match os {
-                Os::Windows => "flutter.bat",
-                _ => "flutter",
-            }
-        } else {
-            match os {
-                Os::Windows => "dart.bat",
-                _ => "dart",
-            }
-        };
+        let tool = tool_binary(debug_mode);
 
         let (command, arguments) = if use_fvm {
             (
@@ -138,33 +137,78 @@ impl zed::Extension for DartExtension {
 
         let vm_service_uri = user_config.get("vmServiceUri").and_then(|v| v.as_str());
 
-        let config_json = json!({
-            "type": tool,
+        let stop_on_entry = user_config
+            .get("stopOnEntry")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
+
+        let flutter_mode = user_config
+            .get("flutterMode")
+            .and_then(|v| v.as_str())
+            .unwrap_or("debug");
+
+        let tool_args = user_config
+            .get("toolArgs")
+            .and_then(|v| v.as_array())
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|v| v.as_str())
+                    .map(|s| s.to_string())
+                    .collect::<Vec<String>>()
+            })
+            .unwrap_or_default();
+
+        let env = user_config
+            .get("env")
+            .and_then(|v| v.as_object())
+            .map(|obj| {
+                obj.iter()
+                    .map(|(k, v)| {
+                        (
+                            k.clone(),
+                            v.as_str().unwrap_or_default().to_string(),
+                        )
+                    })
+                    .collect::<Vec<(String, String)>>()
+            })
+            .unwrap_or_default();
+
+        // Use debug_mode ("flutter"/"dart") rather than tool binary name so that
+        // the config is correct on all platforms (e.g. not "flutter.bat" on Windows).
+        let mut config_json = json!({
+            "type": debug_mode,
             "request": request,
-            "vmServiceUri": vm_service_uri,
             "program": program,
             "cwd": cwd.clone().unwrap_or_default(),
             "args": args,
-            "flutterMode": "debug",
+            "flutterMode": flutter_mode,
             "deviceId": device_id,
             "platform": platform,
-            "stopOnEntry": false
-        })
-        .to_string();
+            "stopOnEntry": stop_on_entry,
+            "sendLogsToClient": true
+        });
+
+        if let Some(uri) = vm_service_uri {
+            config_json["vmServiceUri"] = json!(uri);
+        }
+
+        if !tool_args.is_empty() {
+            config_json["toolArgs"] = json!(tool_args);
+        }
 
         let debug_adapter_binary = DebugAdapterBinary {
             command: Some(command),
             arguments,
-            envs: vec![], // Add any Dart-specific env vars if needed
+            envs: env,
             cwd,
             connection: None,
             request_args: StartDebuggingRequestArguments {
-                configuration: config_json,
+                configuration: config_json.to_string(),
                 request: match request {
                     "attach" => StartDebuggingRequestArgumentsRequest::Attach,
                     _ => StartDebuggingRequestArgumentsRequest::Launch,
                 },
-            }, // request_args: StartDebuggingRequestArguments:,
+            },
         };
         Result::Ok(debug_adapter_binary)
     }
