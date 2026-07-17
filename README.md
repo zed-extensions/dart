@@ -8,7 +8,7 @@ To make the most of the Dart LSP in Zed, you can configure it to automatically o
 
 ### Settings (`settings.json`)
 
-Add the following to your `settings.json` to enable productivity features like organizing imports on save:
+Add the following to your `settings.json` to enable features like organizing imports on save:
 
 ```json
 {
@@ -22,21 +22,6 @@ Add the following to your `settings.json` to enable productivity features like o
     }
   }
 }
-```
-
-### Key Bindings (`keymap.json`)
-
-You can bind specific LSP actions to keyboard shortcuts. For example, to manually trigger "Sort Members":
-
-```json
-[
-  {
-    "context": "Editor && mode == full && language == Dart",
-    "bindings": {
-      "ctrl-alt-s": ["editor:apply_code_action", "source.sortMembers"]
-    }
-  }
-]
 ```
 
 ## Documentation
