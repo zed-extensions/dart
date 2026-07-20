@@ -24,6 +24,30 @@ Add the following to your `settings.json` to enable features like organizing imp
 }
 ```
 
+### Debugging tests (`.zed/debug.json`)
+
+Set `"testMode": true` in a debug configuration to run the target file as a test
+suite. The extension spawns the debug adapter with `--test`, so the program runs
+via `flutter test` / `dart test` (headless) instead of `flutter run` / `dart run`.
+Breakpoints, stepping, and variable inspection work as usual.
+
+```json
+{
+  "label": "Debug current test file",
+  "adapter": "Dart",
+  "type": "flutter",
+  "request": "launch",
+  "program": "$ZED_FILE",
+  "cwd": "$ZED_DIRNAME",
+  "testMode": true,
+  "useFvm": true
+}
+```
+
+Zed task variables such as `$ZED_FILE` and `$ZED_DIRNAME` work in `.zed/debug.json`.
+Use `"toolArgs"` to narrow the run, e.g. `"toolArgs": ["--plain-name", "<test name>"]`.
+For a pure-Dart package, set `"type": "dart"` instead (`dart debug_adapter --test`).
+
 ## Documentation
 
 See:
