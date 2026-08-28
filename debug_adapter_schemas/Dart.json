@@ -43,6 +43,11 @@
       "type": "boolean",
       "description": "Whether to use fvm to run the Dart/Flutter program"
     },
+    "testMode": {
+      "type": "boolean",
+      "description": "Run the program as a test suite (spawns the debug adapter with --test, i.e. flutter test / dart test instead of flutter run / dart run).",
+      "default": false
+    },
     "args": {
       "type": "array",
       "description": "Arguments passed to the Dart program.",
@@ -71,8 +76,7 @@
       "enum": [
         "debug",
         "profile",
-        "release",
-        "test"
+        "release"
       ],
       "description": "The Flutter mode to use.",
       "default": "debug"
