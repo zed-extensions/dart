@@ -1,41 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Dart Debug Adapter Configuration",
+  "title": "Flutter Debug Adapter Configuration",
   "type": "object",
   "properties": {
     "adapter": {
       "type": "string",
       "enum": [
-        "Dart",
         "flutter",
-        "Flutter"
-      ]
+        "Flutter",
+        "Dart"
+      ],
+      "description": "The debug adapter name"
     },
     "type": {
       "type": "string",
       "enum": [
-        "dart",
-        "flutter"
+        "flutter",
+        "dart"
       ],
-      "default": "dart",
-      "description": "Debug Flutter or Dart file"
+      "description": "Debug mode (flutter or dart)",
+      "default": "flutter"
     },
     "label": {
       "type": "string",
       "description": "Human-readable name for this debug configuration",
       "examples": [
-        "Launch Dart App",
-        "Debug Main",
-        "Dart Console"
+        "Launch Flutter App",
+        "Debug Main"
       ]
     },
     "program": {
       "type": "string",
-      "description": "Path to the Dart file to debug",
+      "description": "Path to the Flutter entrypoint file (defaults to lib/main.dart)",
+      "default": "lib/main.dart",
       "examples": [
-        "lib/main.dart",
-        "bin/main.dart",
-        "test/example_test.dart"
+        "lib/main.dart"
       ]
     },
     "cwd": {
@@ -44,7 +43,7 @@
     },
     "useFvm": {
       "type": "boolean",
-      "description": "Whether to use fvm to run the Dart/Flutter program"
+      "description": "Whether to use fvm to run the Flutter tool"
     },
     "flutterPath": {
       "type": "string",
@@ -52,7 +51,7 @@
     },
     "args": {
       "type": "array",
-      "description": "Arguments passed to the Dart program.",
+      "description": "Arguments passed to the Flutter application.",
       "items": {
         "type": "string"
       },
@@ -60,7 +59,7 @@
     },
     "toolArgs": {
       "type": "array",
-      "description": "Arguments passed to the Flutter/Dart tool (e.g. --flavor, -d chrome).",
+      "description": "Arguments passed to the Flutter tool (e.g. --flavor, -d chrome).",
       "items": {
         "type": "string"
       },
@@ -89,7 +88,7 @@
       "description": "The device to launch on, passed to the Flutter tool as `-d <deviceId>`. Ignored if toolArgs already contains -d/--device-id. If unset, Flutter auto-picks a device.",
       "examples": [
         "chrome",
-        "edge",
+        "macos",
         "<android-id>",
         "<ios-id>"
       ]
@@ -121,7 +120,6 @@
     }
   },
   "required": [
-    "program",
     "adapter"
   ],
   "additionalProperties": false

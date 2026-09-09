@@ -3,8 +3,9 @@ use zed::settings::LspSettings;
 use zed::{CodeLabel, CodeLabelSpan};
 use zed_extension_api::serde_json::json;
 use zed_extension_api::{
-    self as zed, current_platform, serde_json, DebugAdapterBinary, DebugTaskDefinition, Os, Result,
+    self as zed, DebugAdapterBinary, DebugTaskDefinition, Os, Result,
     StartDebuggingRequestArguments, StartDebuggingRequestArgumentsRequest, Worktree,
+    current_platform, serde_json,
 };
 
 fn tool_binary(debug_mode: &str) -> &'static str {
@@ -67,9 +68,9 @@ impl zed::Extension for DartExtension {
     /// https://github.com/zed-industries/zed/blob/main/crates/dap_adapters/src/gdb.rs
     fn get_dap_binary(
         &mut self,
-        _adapter_name: String,
+        adapter_name: String,
         config: DebugTaskDefinition,
-        _user_provided_debug_adapter_path: Option<String>,
+        user_provided_debug_adapter_path: Option<String>,
         worktree: &Worktree,
     ) -> Result<DebugAdapterBinary, String> {
         let user_config: serde_json::Value = serde_json::from_str(&config.config)
@@ -96,16 +97,35 @@ impl zed::Extension for DartExtension {
             .and_then(|v| v.as_bool())
             .unwrap_or(false);
 
-        // Get debug_mode from user config (flutter or dart)
+        // Get debug_mode from user config or infer from adapter name (e.g. "flutter")
+        let is_flutter_adapter = adapter_name.eq_ignore_ascii_case("flutter");
         let debug_mode = user_config
             .get("type")
             .and_then(|v| v.as_str())
             .filter(|s| !s.trim().is_empty())
-            .ok_or_else(|| "type is required and cannot be empty or null".to_string())?;
+            .unwrap_or_else(|| {
+                if is_flutter_adapter {
+                    "flutter"
+                } else {
+                    "dart"
+                }
+            });
 
         let tool = tool_binary(debug_mode);
 
-        let (command, arguments) = if use_fvm {
+        let custom_flutter_path = user_config
+            .get("flutterPath")
+            .or_else(|| user_config.get("flutter_path"))
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string())
+            .or(user_provided_debug_adapter_path);
+
+        let (command, arguments) = if debug_mode == "flutter" && custom_flutter_path.is_some() {
+            (
+                custom_flutter_path.unwrap(),
+                vec!["debug_adapter".to_string()],
+            )
+        } else if use_fvm {
             let fvm_path = worktree.which("fvm").ok_or_else(|| {
                 "fvm not found in PATH. Install fvm or set useFvm to false.".to_string()
             })?;
@@ -113,11 +133,17 @@ impl zed::Extension for DartExtension {
                 fvm_path,
                 vec![tool.to_string(), "debug_adapter".to_string()],
             )
-        } else {
-            let tool_path = worktree.which(tool).ok_or_else(|| {
-                format!("{tool} not found in PATH. Install from dart.dev or flutter.dev.")
-            })?;
+        } else if let Some(tool_path) = worktree.which(tool) {
             (tool_path, vec!["debug_adapter".to_string()])
+        } else if debug_mode == "flutter" && worktree.which("fvm").is_some() {
+            (
+                worktree.which("fvm").unwrap(),
+                vec![tool.to_string(), "debug_adapter".to_string()],
+            )
+        } else {
+            return Err(format!(
+                "{tool} not found in PATH. Install from dart.dev or flutter.dev, or specify flutterPath in your debug config."
+            ));
         };
 
         let device_id = user_config.get("deviceId").and_then(|v| v.as_str());
@@ -242,11 +268,9 @@ impl zed::Extension for DartExtension {
             Some(v) if v == "launch" => Ok(StartDebuggingRequestArgumentsRequest::Launch),
             Some(v) if v == "attach" => Ok(StartDebuggingRequestArgumentsRequest::Attach),
             Some(value) => Err(format!(
-                "Unexpected value for `request` key in Dart debug adapter configuration: {value:?}"
+                "Unexpected value for `request` key in debug adapter configuration: {value:?}"
             )),
-            None => {
-                Err("Missing required `request` field in Dart debug adapter configuration".into())
-            }
+            None => Ok(StartDebuggingRequestArgumentsRequest::Launch),
         }
     }
 
