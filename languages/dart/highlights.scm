@@ -78,6 +78,15 @@
 (constructor_signature
   name: (identifier) @type)
 
+(primary_constructor
+  name: (identifier) @type)
+
+(extension_type_declaration
+  name: (identifier) @type)
+
+(representation_declaration
+  name: (identifier) @property)
+
 (scoped_identifier
   scope: (identifier) @type)
 
@@ -200,6 +209,11 @@
   (label
     (identifier) @variable.parameter))
 
+; Record fields
+(record_field
+  (label
+    (identifier) @property))
+
 ; Literals
 ; --------------------
 [
@@ -255,6 +269,9 @@
   "Function"
 ] @keyword.definition
 
+(extension_type_declaration
+  "type" @keyword.definition)
+
 "return" @keyword.return
 
 ; Built in identifiers:
@@ -306,6 +323,7 @@
   "switch"
   "default"
   "case"
+  "when"
 ] @keyword.conditional
 
 [
