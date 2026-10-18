@@ -26,3 +26,16 @@
 
 (initialized_identifier
   (identifier) @name) @item
+
+; Test and group blocks.
+; Covers official Dart and Flutter test methods, as well as methods from popular packages
+((expression_statement
+  (identifier) @_fn @context
+  (selector
+    (argument_part
+      (arguments
+        .
+        (argument
+          (string_literal) @name)))))
+  (#any-of? @_fn
+    "group" "test" "testWidgets" "testGoldens" "goldenTest" "patrolTest")) @item
