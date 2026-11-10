@@ -78,6 +78,10 @@
 (constructor_signature
   name: (identifier) @type)
 
+; Dart 3.13 primary constructors: `class const Point._(final int x)`
+(primary_constructor
+  name: (identifier) @type)
+
 (scoped_identifier
   scope: (identifier) @type)
 
@@ -99,6 +103,16 @@
 
 (type_alias
   (type_identifier) @type.definition)
+
+; Extension types
+(extension_type_declaration
+  "type" @keyword.definition)
+
+(extension_type_declaration
+  name: (identifier) @type)
+
+(representation_declaration
+  name: (identifier) @property)
 
 ; Variables
 ; --------------------
@@ -125,6 +139,18 @@
   (identifier) @property)
 
 (getter_signature
+  (identifier) @property)
+
+; Record field labels, e.g. `(1, name: 'x')`
+(record_field
+  (label
+    (identifier) @property))
+
+; Field names in patterns, e.g. `Point(x: var px)` or `(name: var n)`
+(object_pattern
+  (identifier) @property)
+
+(record_pattern
   (identifier) @property)
 
 (setter_signature
@@ -306,6 +332,7 @@
   "switch"
   "default"
   "case"
+  "when"
 ] @keyword.conditional
 
 [
